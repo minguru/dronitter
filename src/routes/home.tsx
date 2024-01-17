@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom"
 import { auth } from "./firebase"
 import styled from "styled-components"
+import { Logo } from '../components/logo'
+import PostTweetForm from "../components/post-tweet-form"
 
 const Wrapper = styled.div`
 	display: flex;
@@ -17,7 +19,7 @@ const Wrapper = styled.div`
 		width: 100px;
 		border-radius: 50px;
 		padding: 5px 0;
-		background-color: #fefefe;
+		background-color: var(--wht);
 		border: none;
 		margin-top: 20px;
 
@@ -29,23 +31,22 @@ const Wrapper = styled.div`
 
 	.login-button {
 		text-align: center;
-		color: #101010;
+		color: var(--blk);
 		text-decoration: none;
 	}
 `
 
+
 export default function home() {
 	const user = auth.currentUser
 
-	const logOut = async () => {
-		await auth.signOut()
-		window.location.reload()
-	}
-
 	return (
 		<Wrapper>
+			<Logo className="white" style={{marginBottom: "10px"}}></Logo>
 			<h1>Welcome{user ? `! ${user.displayName}.` : ` to Dronitter`}</h1>
-			{user ? <button onClick={logOut}>Logout</button> : <Link to="/login" className="login-button">Login</Link>}
+			{user ? (
+				<PostTweetForm/>
+			) : <Link to="/login" className="login-button">Login</Link>}
 		</Wrapper>
 	)
 }

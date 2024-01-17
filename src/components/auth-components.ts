@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
 	flex-direction: column;
 	align-items: center;
 	width: 420px;
-	padding: 50px 0;
+	padding: 20px 0;
 `
 export const Title = styled.h1`
 	font-size: 32px;
@@ -29,7 +29,7 @@ export const Input = styled.input`
 		margin-top: 5px;
     &.login {
       background-color: #202020;
-      color: #fefefe;
+      color: var(--wht);
       &:hover {
         background-color: #303030;
       }

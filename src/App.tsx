@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react"
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
+import { auth } from "./routes/firebase"
 import { createGlobalStyle, styled } from "styled-components"
 import reset from "styled-reset"
 import Layout from "./components/layout"
 import Home from "./routes/home"
 import Profile from "./routes/profile"
 import Login from "./routes/login"
-import CreateAccount from "./routes/create_account"
+import CreateAccount from "./routes/create-account"
 import LoadingScreen from "./components/loading-screen"
-import { auth } from "./routes/firebase"
 import ProtectedRoute from "./components/protected-route"
 
 const router = createBrowserRouter([
@@ -42,13 +42,19 @@ const router = createBrowserRouter([
 
 const GlobalStyles = createGlobalStyle`
   ${reset};
+  @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+  :root {
+    --pclr: #5400E6; // point color
+    --wht: #fefefe;
+    --blk: #101010;
+  }
   * {
     box-sizing: border-box;
+    font-family: Pretendard;
   }
   body {
-    background-color: #101010;
-    color: #fefefe;
-    font-family: system-ui;
+    background-color: var(--blk);
+    color: var(--wht);
   }
   i {
     font-style: italic;

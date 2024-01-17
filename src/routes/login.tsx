@@ -13,6 +13,7 @@ import {
 } from "../components/auth-components"
 import GithubButton from "../components/github-button"
 import GoogleButton from "../components/google-button"
+import { Logo } from "../components/logo"
 
 export default function login() {
 	const navigate = useNavigate()
@@ -58,6 +59,7 @@ export default function login() {
 	}
 
 	return <Wrapper>
+		<Logo className="white"></Logo>
 		<Title>Log into <i>Dronitter</i></Title>
 		<Form onSubmit={onSubmit}>
 			<Input name="email" value={email} placeholder="E-mail" type="email" required onChange={onChange}/>

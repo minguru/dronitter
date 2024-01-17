@@ -11,8 +11,9 @@ import {
 	Error,
 	Switcher
 } from "../components/auth-components"
+import { Logo } from "../components/logo"
 
-export default function create_account() {
+export default function CreateAccount() {
 	const navigate = useNavigate()
 	const [isLoading, setLoading] = useState(false)
 	const [name, setName] = useState("")
@@ -61,6 +62,7 @@ export default function create_account() {
 	}
 
 	return <Wrapper>
+		<Logo className="white"></Logo>
 		<Title>Join <i>Dronitter</i></Title>
 		<Form onSubmit={onSubmit}>
 			<Input name="name" value={name} placeholder="Name" type="text" required onChange={onChange}/>

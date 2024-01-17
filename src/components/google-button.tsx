@@ -4,7 +4,7 @@ import { auth } from "../routes/firebase"
 import { useNavigate } from "react-router-dom"
 
 const Button = styled.span`
-  background-color: #fefefe;
+  background-color: var(--wht);
   font-weight: 600;
   padding: 10px 20px;
   border-radius: 50px;
@@ -14,7 +14,7 @@ const Button = styled.span`
   gap: 5px;
   justify-content: center;
   align-items: center;
-  color: #101010;
+  color: var(--blk);
   margin-top: 10px;
   &:hover {
     opacity: 95%;
