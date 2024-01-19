@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components"
 
 export const Logo = styled.figure.attrs<{ $width?: string; $height: string; }>(props => ({
   type: "text",

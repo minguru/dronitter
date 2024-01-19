@@ -1,18 +1,20 @@
 import { Link } from "react-router-dom"
-import { auth } from "./firebase"
 import styled from "styled-components"
+import { auth } from "./firebase"
 import { Logo } from '../components/logo'
 import PostTweetForm from "../components/post-tweet-form"
+import Timeline from "../components/timeline"
 
 const Wrapper = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	padding: 20px 0;
+	display: grid;
+	grid-template-rows: 100px 1fr 1fr 20fr;
+	justify-items: center;
+	height: 100vh;
+	padding: 20px 0 0;
 
 	h1 {
-		font-size: 40px;
-		font-weight: 800;
+		font-size: 32px;
+		font-weight: 700;
 	}
 
 	button, .login-button {
@@ -45,7 +47,10 @@ export default function home() {
 			<Logo className="white" style={{marginBottom: "10px"}}></Logo>
 			<h1>Welcome{user ? `! ${user.displayName}.` : ` to Dronitter`}</h1>
 			{user ? (
-				<PostTweetForm/>
+				<>
+					<PostTweetForm/>
+					<Timeline/>
+				</>
 			) : <Link to="/login" className="login-button">Login</Link>}
 		</Wrapper>
 	)

@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
-import { auth } from "./firebase"
 import { FirebaseError } from "firebase/app"
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import { auth } from "./firebase"
 import {
 	Wrapper,
 	Title,

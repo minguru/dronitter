@@ -1,7 +1,7 @@
-import { GithubAuthProvider, signInWithPopup } from "firebase/auth"
-import styled from "styled-components"
-import { auth } from "../routes/firebase"
 import { useNavigate } from "react-router-dom"
+import styled from "styled-components"
+import { GithubAuthProvider, signInWithPopup } from "firebase/auth"
+import { auth } from "../routes/firebase"
 
 const Button = styled.span`
   background-color: var(--wht);
