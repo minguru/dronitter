@@ -103,7 +103,7 @@ export default function PostTweetForm() {
         userId: user.uid,
       })
 
-      const locationRef = ref(storage, `posting/${user.uid}-${user.displayName}/${doc.id}`)
+      const locationRef = ref(storage, `posting/${user.uid}/${doc.id}`)
 
       const result = await uploadBytes(locationRef, file)
       const url = await getDownloadURL(result.ref)
