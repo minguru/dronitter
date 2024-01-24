@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import styled from "styled-components"
 import { auth } from "./firebase"
 import { Logo } from '../components/logo'
-import PostTweetForm from "../components/post-tweet-form"
+import PostPostingForm from "../components/post-posting-form"
 import Timeline from "../components/timeline"
 
 const Wrapper = styled.div`
@@ -48,7 +48,7 @@ export default function home() {
 			<h1>Welcome{user ? `! ${user.displayName}.` : ` to Dronitter`}</h1>
 			{user ? (
 				<>
-					<PostTweetForm/>
+					<PostPostingForm/>
 					<Timeline/>
 				</>
 			) : <Link to="/login" className="login-button">Login</Link>}

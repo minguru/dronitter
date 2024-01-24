@@ -101,6 +101,7 @@ export default function PostTweetForm() {
         createdAt: Date.now(),
         username: user.displayName || "Anonymous",
         userId: user.uid,
+        avatarUrl: user.photoURL
       })
 
       const locationRef = ref(storage, `posting/${user.uid}/${doc.id}`)

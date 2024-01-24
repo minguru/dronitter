@@ -86,11 +86,11 @@ const MoreButton = styled.div`
   }
 `
 
-export default function Posting({ username, photo, desc, userId, id }: Interface) {
+export default function Posting({ username, photo, desc, userId, id, avatarUrl }: Interface) {
   const user = auth.currentUser
   const moreMenu = useRef()
-  const [trigger, setTrigger] = useState(false)
-  const [ avatar, setAvatar ] = useState(user?.photoURL)
+  const [ trigger, setTrigger ] = useState(false)
+  const [ avatar, setAvatar ] = useState(avatarUrl)
   const moreOpen = () => {
     if (!trigger) {
       moreMenu.current.style.display = "block"
@@ -110,8 +110,6 @@ export default function Posting({ username, photo, desc, userId, id }: Interface
       await deleteObject(photoRef)
     } catch(err) {
       console.log(err)
-    } finally {
-      // 
     }
   }
   const [modal, setModal] = useState(false)
@@ -124,6 +122,7 @@ export default function Posting({ username, photo, desc, userId, id }: Interface
   const modalClosed = (data) => {
     setModal(data)
   }
+
   return (
     <Wrapper>
       <Column>

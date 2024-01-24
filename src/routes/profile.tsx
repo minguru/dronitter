@@ -2,8 +2,8 @@ import styled from "styled-components"
 import { auth, db, storage } from "./firebase"
 import { useEffect, useState } from "react"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
-import { updateProfile } from "firebase/auth"
-import { collection, doc, getDocs, limit, orderBy, query, updateDoc, where } from "firebase/firestore"
+import { Unsubscribe, updateProfile } from "firebase/auth"
+import { collection, doc, getDocs, limit, onSnapshot, orderBy, query, updateDoc, where } from "firebase/firestore"
 import Posting from "../components/posting"
 import { Link } from "react-router-dom"
 import { Interface } from "../components/timeline"
@@ -126,6 +126,7 @@ export default function profile() {
 	const [ avatar, setAvatar ] = useState(user?.photoURL)
 	const [ posts, setPosts ] = useState<Interface[]>([])
 	const [ username, setUsername ] = useState(user?.displayName)
+	const [ isLoading, setIsLoading ] = useState(true)
 	const onAvatarChange = async (e:React.ChangeEvent<HTMLInputElement>) => {
 		const { files } = e.target
 		if ( !user ) return
@@ -140,28 +141,6 @@ export default function profile() {
 				photoURL: avatarUrl
 			})
 		}
-	}
-	const fetchPosts = async () => {
-		const postQuery = query(
-			collection(db, "posting"),
-			where("userId", "==", user?.uid),
-			orderBy("createdAt", "desc"),
-			limit(25)
-		)
-
-		const snapshot = await getDocs(postQuery)
-		const posts = snapshot.docs.map(doc => {
-			const { desc, createdAt, userId, username, photo } = doc.data()
-			return {
-				desc,
-				createdAt,
-				userId,
-				username,
-				photo,
-				id: doc.id
-			}
-		})
-		setPosts(posts)
 	}
 	const onNameEdit = async () => {
 		if ( !user ) return
@@ -206,8 +185,50 @@ export default function profile() {
 	}
 
 	useEffect(() => {
-		fetchPosts()
-	}, [])
+		if ( !user ) return
+
+    let unsubscribe : Unsubscribe | null = null
+    const fetchPosts = async () => {
+      const postsQuery = query(
+        collection(db, "posting"),
+				where("userId", "==", user.uid),
+        orderBy("createdAt", "desc"),
+        limit(25)
+      )
+      /* const snapshot = await getDocs(postsQuery)
+      const posts = snapshot.docs.map(doc => {
+        const {desc, createdAt, userId, username, photo} = doc.data()
+        return {
+          desc,
+          createdAt,
+          userId,
+          username,
+          photo,
+          id: doc.id
+        }
+      }) */
+      unsubscribe = await onSnapshot(postsQuery, (snapshot) => {
+        const posts = snapshot.docs.map(doc => {
+          const {desc, createdAt, userId, username, photo, avatarUrl} = doc.data()
+          return {
+            desc,
+            createdAt,
+            userId,
+            username,
+            photo,
+            id: doc.id,
+            avatarUrl
+          }
+        })
+        setPosts(posts)
+				setIsLoading(false)
+      })
+    }
+    fetchPosts()
+    return () => {
+      unsubscribe && unsubscribe()
+    }
+  }, [])
 
 	return (
 		<>
@@ -240,12 +261,14 @@ export default function profile() {
 				</Profile>
 
 				<MyPosts>
-					{ posts.length === 0 ? (
-						<div className="post-nothing">
-							<p>There is nothing!<br /><span>Please go back to <Link to="/">Home</Link> and upload some post!</span></p>
-						</div>
-					) : (
+					{ posts.length !== 0 ? (
 						posts.map(post => <Posting key={post.id} {...post}/>)
+					) : (
+						!isLoading ? (
+							<div className="post-nothing">
+								<p>There is nothing!<br /><span>Please go back to <Link to="/">Home</Link> and upload some post!</span></p>
+							</div>
+						) : null
 					) }
 				</MyPosts>
 			</Wrapper>

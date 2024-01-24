@@ -111,7 +111,7 @@ export default function EditPosting({ modalClose, desc, userId, db, dataid }) {
     e.preventDefault();
     const user = auth.currentUser
     
-    if ( user?.uid !== userId || beforeDesc === post || post === "" ) return
+    if ( !user || user?.uid !== userId || beforeDesc === post || post === "" ) return
 
     try {
       setLoading(true)

@@ -12,6 +12,7 @@ export interface Interface {
   userId: string;
   username: string;
   createdAt: number;
+  avatarUrl: string;
 }
 
 const Wrapper = styled.div`
@@ -57,16 +58,17 @@ export default function Timeline() {
           id: doc.id
         }
       }) */
-      unsubscribe = await onSnapshot(postsQuery, (snapshot) => {
+      unsubscribe = onSnapshot(postsQuery, (snapshot) => {
         const posts = snapshot.docs.map(doc => {
-          const {desc, createdAt, userId, username, photo} = doc.data()
+          const { desc, createdAt, userId, username, photo, avatarUrl } = doc.data()
           return {
             desc,
             createdAt,
             userId,
             username,
             photo,
-            id: doc.id
+            id: doc.id,
+            avatarUrl
           }
         })
         setPosts(posts)
@@ -80,7 +82,7 @@ export default function Timeline() {
 
   return (
     <Wrapper>
-      {posts.map(post => <Posting key={post.id} {...post}/>)}
+      {posts.map(post => <Posting key={post.id} {...post} />)}
     </Wrapper>
   )
 }
