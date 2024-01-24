@@ -65,9 +65,9 @@ const SubmitButton = styled.input`
 `
 
 export default function PostTweetForm() {
-  const [isLoading, setLoading] = useState(false)
-  const [post, setPost] = useState("")
-  const [file, setFile] = useState<File | null>(null)
+  const [ isLoading, setLoading ] = useState(false)
+  const [ post, setPost ] = useState("")
+  const [ file, setFile ] = useState<File | null>(null)
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPost(e.target.value)
   }

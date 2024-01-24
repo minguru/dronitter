@@ -34,8 +34,13 @@ const AvatarUpload = styled.label`
 	align-items: center;
 	position: relative;
 
+	img {
+		width: auto;
+		height: 100%;
+	}
+
 	svg {
-		height: 50px;
+		height: 50%;
 	}
 
 	.avatar-hover {
@@ -57,8 +62,12 @@ const AvatarUpload = styled.label`
 		display: flex;
 	}
 `
-const AvatarImage = styled.img`
+const AvatarImage = styled.div`
 	width: 100%;
+	height: 100%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
 `
 const AvatarInput = styled.input`
 	display: none;
@@ -127,6 +136,7 @@ export default function profile() {
 	const [ posts, setPosts ] = useState<Interface[]>([])
 	const [ username, setUsername ] = useState(user?.displayName)
 	const [ isLoading, setIsLoading ] = useState(true)
+
 	const onAvatarChange = async (e:React.ChangeEvent<HTMLInputElement>) => {
 		const { files } = e.target
 		if ( !user ) return
@@ -136,12 +146,26 @@ export default function profile() {
 			const locationRef = ref(storage, `avatars/${user.uid}`)
 			const result = await uploadBytes(locationRef, file)
 			const avatarUrl = await getDownloadURL(result.ref)
-			setAvatar(avatarUrl)
+
 			await updateProfile(user, {
 				photoURL: avatarUrl
 			})
+			
+			const querySnapshot = await getDocs(collection(db, "posting"))
+			querySnapshot.forEach(docu => {
+				const docRef = doc(db, "posting", docu.id)
+
+				if ( docu.data().userId !== user.uid ) return
+				
+				updateDoc(docRef, {
+					avatarUrl: avatarUrl
+				})
+			})
+
+			setAvatar(avatarUrl)
 		}
 	}
+
 	const onNameEdit = async () => {
 		if ( !user ) return
 
@@ -168,6 +192,9 @@ export default function profile() {
 			const querySnapshot = await getDocs(collection(db, "posting"))
 			querySnapshot.forEach(docu => {
 				const docRef = doc(db, "posting", docu.id)
+
+				if ( docu.data().userId !== user.uid ) return
+
 				updateDoc(docRef, {
 					username: nameToUpdate
 				})
@@ -207,7 +234,7 @@ export default function profile() {
           id: doc.id
         }
       }) */
-      unsubscribe = await onSnapshot(postsQuery, (snapshot) => {
+      unsubscribe = onSnapshot(postsQuery, (snapshot) => {
         const posts = snapshot.docs.map(doc => {
           const {desc, createdAt, userId, username, photo, avatarUrl} = doc.data()
           return {
@@ -236,13 +263,13 @@ export default function profile() {
 				<Profile>
 					<AvatarUpload htmlFor="avatar">
 						{ avatar ? (
-						<AvatarImage src={avatar} title="Click to change your avatar"/>
+						<AvatarImage style={{backgroundImage: `url(${avatar})`}} />
 						) : (
 						<svg data-slot="icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 							<path clipRule="evenodd" fillRule="evenodd" d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
 						</svg>
 						) }
-						<div className="avatar-hover">
+						<div className="avatar-hover" title="Click to change your avatar">
 							<svg data-slot="icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 								<path d="M12 9a3.75 3.75 0 1 0 0 7.5A3.75 3.75 0 0 0 12 9Z" />
 								<path clipRule="evenodd" fillRule="evenodd" d="M9.344 3.071a49.52 49.52 0 0 1 5.312 0c.967.052 1.83.585 2.332 1.39l.821 1.317c.24.383.645.643 1.11.71.386.054.77.113 1.152.177 1.432.239 2.429 1.493 2.429 2.909V18a3 3 0 0 1-3 3h-15a3 3 0 0 1-3-3V9.574c0-1.416.997-2.67 2.429-2.909.382-.064.766-.123 1.151-.178a1.56 1.56 0 0 0 1.11-.71l.822-1.315a2.942 2.942 0 0 1 2.332-1.39ZM6.75 12.75a5.25 5.25 0 1 1 10.5 0 5.25 5.25 0 0 1-10.5 0Zm12-1.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" />

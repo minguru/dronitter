@@ -36,7 +36,7 @@ const Wrapper = styled.div`
 `
 
 export default function Timeline() {
-  const [posts, setPosts] = useState<Interface[]>([])
+  const [ posts, setPosts ] = useState<Interface[]>([])
 
   useEffect(() => {
     let unsubscribe : Unsubscribe | null = null
