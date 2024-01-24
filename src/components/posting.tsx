@@ -17,11 +17,18 @@ const Wrapper = styled.div`
 const Column = styled.div`
   
 `
-const Userimage = styled.div`
+const UserAvatar = styled.div`
   width: 50px;
   height: 50px;
   border-radius: 50%;
   background-color: var(--pclr);
+  overflow: hidden;
+  img {
+    width: 100%;
+  }
+  svg {
+    width: 100%;
+  }
 `
 const Photo = styled.img`
   width: 100%;
@@ -80,8 +87,10 @@ const MoreButton = styled.div`
 `
 
 export default function Posting({ username, photo, desc, userId, id }: Interface) {
+  const user = auth.currentUser
   const moreMenu = useRef()
   const [trigger, setTrigger] = useState(false)
+  const [ avatar, setAvatar ] = useState(user?.photoURL)
   const moreOpen = () => {
     if (!trigger) {
       moreMenu.current.style.display = "block"
@@ -91,7 +100,6 @@ export default function Posting({ username, photo, desc, userId, id }: Interface
       setTrigger(false)
     }
   }
-  const user = auth.currentUser
   const onDelete = async () => {
     const ok = confirm('Delete the post. Are you sure?')
     if ( !ok || user?.uid !== userId) return
@@ -119,7 +127,15 @@ export default function Posting({ username, photo, desc, userId, id }: Interface
   return (
     <Wrapper>
       <Column>
-        <Userimage></Userimage>
+        <UserAvatar>
+          { avatar ? (
+            <img src={avatar} />
+          ) : (
+            <svg data-slot="icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path clipRule="evenodd" fillRule="evenodd" d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+            </svg>
+          ) }
+        </UserAvatar>
       </Column>
       <Column>
         <Username>{username}</Username>

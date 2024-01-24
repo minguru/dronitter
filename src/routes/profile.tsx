@@ -4,8 +4,9 @@ import { useEffect, useState } from "react"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { updateProfile } from "firebase/auth"
 import { collection, doc, getDocs, limit, orderBy, query, updateDoc, where } from "firebase/firestore"
-import Timeline, { Interface } from "../components/timeline"
 import Posting from "../components/posting"
+import { Link } from "react-router-dom"
+import { Interface } from "../components/timeline"
 
 const Wrapper = styled.div`
 height: 100vh;
@@ -86,12 +87,45 @@ const Name = styled.span`
 		}
 	}
 `
+const MyPosts = styled.div`
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: overlay;
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+	&::-webkit-scrollbar {
+		background-color: transparent;
+		width: 10px;
+	}
+	&::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		background: rgba(255, 255, 255, .1);
+	}
+	&::-webkit-scrollbar-thumb:hover {
+		background: rgba(255, 255, 255, .2);
+	}
+
+	.post-nothing {
+		width: 100%;
+		text-align: center;
+		p {
+			color: #666;
+			font-size: 24px;
+			span {
+				font-size: 18px;
+				display: inline-block;
+				margin-top: 15px;
+			}
+		}
+	}
+`
 
 export default function profile() {
 	const user = auth.currentUser
 	const [ avatar, setAvatar ] = useState(user?.photoURL)
 	const [ posts, setPosts ] = useState<Interface[]>([])
-	const [ username, setUsername ] = useState(user.displayName)
+	const [ username, setUsername ] = useState(user?.displayName)
 	const onAvatarChange = async (e:React.ChangeEvent<HTMLInputElement>) => {
 		const { files } = e.target
 		if ( !user ) return
@@ -205,9 +239,15 @@ export default function profile() {
 					</Name>
 				</Profile>
 
-				<Timeline>
-					{ posts.map(post => <Posting key={post.id} {...post}/>) }
-				</Timeline>
+				<MyPosts>
+					{ posts.length === 0 ? (
+						<div className="post-nothing">
+							<p>There is nothing!<br /><span>Please go back to <Link to="/">Home</Link> and upload some post!</span></p>
+						</div>
+					) : (
+						posts.map(post => <Posting key={post.id} {...post}/>)
+					) }
+				</MyPosts>
 			</Wrapper>
 		</>
 	)
