@@ -14,7 +14,6 @@ const Wrapper = styled.div`
 
 	h1 {
 		font-size: 32px;
-		font-weight: 700;
 	}
 
 	button, .login-button {
@@ -24,6 +23,7 @@ const Wrapper = styled.div`
 		background-color: var(--wht);
 		border: none;
 		margin-top: 20px;
+		line-height: 1.2;
 
 		&:hover {
 			cursor: pointer;
@@ -44,8 +44,8 @@ export default function home() {
 
 	return (
 		<Wrapper>
-			<Logo className="white" style={{marginBottom: "10px"}}></Logo>
-			<h1>Welcome{user ? `! ${user.displayName}.` : ` to Dronitter`}</h1>
+			<Logo className="white" style={{marginBottom: "10px"}} $width="" $height=""></Logo>
+			<h1>Welcome{user ? `! ${user.displayName}.` : (<> to <i>Dronitter</i></>)}</h1>
 			{user ? (
 				<>
 					<PostPostingForm/>

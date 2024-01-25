@@ -62,7 +62,7 @@ export default function CreateAccount() {
 	}
 
 	return <Wrapper>
-		<Logo className="white"></Logo>
+		<Logo className="white" $width="" $height=""></Logo>
 		<Title>Join <i>Dronitter</i></Title>
 		<Form onSubmit={onSubmit}>
 			<Input name="name" value={name} placeholder="Name" type="text" required onChange={onChange}/>

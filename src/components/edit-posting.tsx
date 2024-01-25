@@ -86,11 +86,12 @@ const CancelButton = styled.div`
   }
 `
 
-export default function EditPosting({ modalClose, desc, userId, db, dataid }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function EditPosting(props: any) {
   const [popup, setPopup] = useState(true)
   const [isLoading, setLoading] = useState(false)
-  const beforeDesc = desc
-  const [post, setPost] = useState(desc)
+  const beforeDesc = props.desc
+  const [post, setPost] = useState(props.desc)
   const [file, setFile] = useState<File | null>(null)
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPost(e.target.value)
@@ -111,24 +112,24 @@ export default function EditPosting({ modalClose, desc, userId, db, dataid }) {
     e.preventDefault();
     const user = auth.currentUser
     
-    if ( !user || user?.uid !== userId || beforeDesc === post || post === "" ) return
+    if ( !user || user?.uid !== props.userId || beforeDesc === post || post === "" ) return
 
     try {
       setLoading(true)
-      await updateDoc(doc(db, "posting", dataid), {
+      await updateDoc(doc(props.db, "posting", props.dataid), {
         desc: post,
         createdAt: Date.now()
       })
 
       if (file) {
-        const photoRef = ref(storage, `posting/${user.uid}-${user.displayName}/${dataid}`)
+        const photoRef = ref(storage, `posting/${user.uid}-${user.displayName}/${props.dataid}`)
         await deleteObject(photoRef)
 
-        const locationRef = ref(storage, `posting/${user.uid}-${user.displayName}/${dataid}`)
+        const locationRef = ref(storage, `posting/${user.uid}-${user.displayName}/${props.dataid}`)
 
         const result = await uploadBytes(locationRef, file)
         const url = await getDownloadURL(result.ref)
-        await updateDoc(doc(db, "posting", dataid), {
+        await updateDoc(doc(props.db, "posting", props.dataid), {
           photo: url
         })
       }
@@ -141,7 +142,7 @@ export default function EditPosting({ modalClose, desc, userId, db, dataid }) {
   }
   const onExit = () => {
     setPopup(false)
-    modalClose(false)
+    props.modalClose(false)
   }
   return (
     <>
@@ -152,7 +153,7 @@ export default function EditPosting({ modalClose, desc, userId, db, dataid }) {
             rows={4}
             maxLength={200}
             onChange={onChange}
-            defaultValue={desc}
+            defaultValue={props.desc}
           />
 
           <ButtonWrapper>

@@ -59,7 +59,7 @@ export default function login() {
 	}
 
 	return <Wrapper>
-		<Logo className="white"></Logo>
+		<Logo className="white" $width="" $height=""></Logo>
 		<Title>Log into <i>Dronitter</i></Title>
 		<Form onSubmit={onSubmit}>
 			<Input name="email" value={email} placeholder="E-mail" type="email" required onChange={onChange}/>

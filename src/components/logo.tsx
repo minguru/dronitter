@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-export const Logo = styled.figure.attrs<{ $width?: string; $height: string; }>(props => ({
+export const Logo = styled.figure.attrs<{ $width?: string | null; $height: string | null; }>(props => ({
   type: "text",
   $width: props.$width || "100px",
   $height: props.$height || "100px"

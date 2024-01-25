@@ -96,9 +96,10 @@ const MoreButton = styled.div`
 
 export default function Posting({ username, photo, desc, userId, id, avatarUrl }: Interface) {
   const user = auth.currentUser
-  const moreMenu = useRef()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const moreMenu: any = useRef()
   const [ trigger, setTrigger ] = useState(false)
-  const [ avatar, setAvatar ] = useState(avatarUrl)
+  const [ avatar ] = useState(avatarUrl)
   const moreOpen = () => {
     if (!trigger) {
       moreMenu.current.style.display = "block"
@@ -127,7 +128,7 @@ export default function Posting({ username, photo, desc, userId, id, avatarUrl }
     if (!modal) setModal(true)
     else setModal(false)
   }
-  const modalClosed = (data) => {
+  const modalClosed = (data: boolean | ((prevState: boolean) => boolean)) => {
     setModal(data)
   }
 
